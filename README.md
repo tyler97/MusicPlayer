@@ -13,12 +13,12 @@ Development Board: FRDM-KL25Z
  
 #### Output Pins  
 
-PTE20: Song LED 1  
-PTE21: Song LED 2  
-PTE22: Song LED 3  
+PTE30: Song LED 1  
+PTE29: Song LED 2  
+PTE23: Song LED 3  
   
-PTE23: Track LED 1  
-PTE29: Track LED 2  
+PTE21: Track LED 1  
+PTE20: Track LED 2  
   
 PTC2: Volume LED  
   
