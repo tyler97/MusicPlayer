@@ -42,43 +42,27 @@ void BOARD_InitBootPins(void);
 
 /*! @name PORTE20 (number 13), J10[1]
   @{ */
-#define BOARD_INITPINS_SongLED1_FGPIO FGPIOE /*!<@brief FGPIO device name: FGPIOE */
-#define BOARD_INITPINS_SongLED1_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
-#define BOARD_INITPINS_SongLED1_PORT PORTE /*!<@brief PORT device name: PORTE */
-#define BOARD_INITPINS_SongLED1_PIN 20U    /*!<@brief PORTE pin index: 20 */
-                                           /* @} */
+#define BOARD_INITPINS_TrackLED2_FGPIO FGPIOE /*!<@brief FGPIO device name: FGPIOE */
+#define BOARD_INITPINS_TrackLED2_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
+#define BOARD_INITPINS_TrackLED2_PORT PORTE /*!<@brief PORT device name: PORTE */
+#define BOARD_INITPINS_TrackLED2_PIN 20U    /*!<@brief PORTE pin index: 20 */
+                                            /* @} */
 
 /*! @name PORTE21 (number 14), J10[3]
-  @{ */
-#define BOARD_INITPINS_SongLED2_FGPIO FGPIOE /*!<@brief FGPIO device name: FGPIOE */
-#define BOARD_INITPINS_SongLED2_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
-#define BOARD_INITPINS_SongLED2_PORT PORTE /*!<@brief PORT device name: PORTE */
-#define BOARD_INITPINS_SongLED2_PIN 21U    /*!<@brief PORTE pin index: 21 */
-                                           /* @} */
-
-/*! @name PORTE22 (number 15), J10[5]
-  @{ */
-#define BOARD_INITPINS_SongLED3_FGPIO FGPIOE /*!<@brief FGPIO device name: FGPIOE */
-#define BOARD_INITPINS_SongLED3_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
-#define BOARD_INITPINS_SongLED3_PORT PORTE /*!<@brief PORT device name: PORTE */
-#define BOARD_INITPINS_SongLED3_PIN 22U    /*!<@brief PORTE pin index: 22 */
-                                           /* @} */
-
-/*! @name PORTE23 (number 16), J10[7]
   @{ */
 #define BOARD_INITPINS_TrackLED1_FGPIO FGPIOE /*!<@brief FGPIO device name: FGPIOE */
 #define BOARD_INITPINS_TrackLED1_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
 #define BOARD_INITPINS_TrackLED1_PORT PORTE /*!<@brief PORT device name: PORTE */
-#define BOARD_INITPINS_TrackLED1_PIN 23U    /*!<@brief PORTE pin index: 23 */
+#define BOARD_INITPINS_TrackLED1_PIN 21U    /*!<@brief PORTE pin index: 21 */
                                             /* @} */
 
 /*! @name PORTE29 (number 21), J10[9]
   @{ */
-#define BOARD_INITPINS_TrackLED2_FGPIO FGPIOE /*!<@brief FGPIO device name: FGPIOE */
-#define BOARD_INITPINS_TrackLED2_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
-#define BOARD_INITPINS_TrackLED2_PORT PORTE /*!<@brief PORT device name: PORTE */
-#define BOARD_INITPINS_TrackLED2_PIN 29U    /*!<@brief PORTE pin index: 29 */
-                                            /* @} */
+#define BOARD_INITPINS_SongLED2_FGPIO FGPIOE /*!<@brief FGPIO device name: FGPIOE */
+#define BOARD_INITPINS_SongLED2_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
+#define BOARD_INITPINS_SongLED2_PORT PORTE /*!<@brief PORT device name: PORTE */
+#define BOARD_INITPINS_SongLED2_PIN 29U    /*!<@brief PORTE pin index: 29 */
+                                           /* @} */
 
 /*! @name PORTC1 (number 56), J10[12]/U6[31]/A5
   @{ */
@@ -115,6 +99,14 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_VolumeOutput_PORT PORTC /*!<@brief PORT device name: PORTC */
 #define BOARD_INITPINS_VolumeOutput_PIN 2U     /*!<@brief PORTC pin index: 2 */
                                                /* @} */
+
+/*! @name PORTE30 (number 22), J10[11]
+  @{ */
+#define BOARD_INITPINS_SongLED1_FGPIO FGPIOE /*!<@brief FGPIO device name: FGPIOE */
+#define BOARD_INITPINS_SongLED1_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
+#define BOARD_INITPINS_SongLED1_PORT PORTE /*!<@brief PORT device name: PORTE */
+#define BOARD_INITPINS_SongLED1_PIN 30U    /*!<@brief PORTE pin index: 30 */
+                                           /* @} */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
