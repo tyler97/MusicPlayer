@@ -80,25 +80,11 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_TrackLED2_PIN 29U    /*!<@brief PORTE pin index: 29 */
                                             /* @} */
 
-/*! @name PORTE30 (number 22), J10[11]
-  @{ */
-#define BOARD_INITPINS_VolumeLED_FGPIO FGPIOE /*!<@brief FGPIO device name: FGPIOE */
-#define BOARD_INITPINS_VolumeLED_GPIO GPIOE /*!<@brief GPIO device name: GPIOE */
-#define BOARD_INITPINS_VolumeLED_PORT PORTE /*!<@brief PORT device name: PORTE */
-#define BOARD_INITPINS_VolumeLED_PIN 30U    /*!<@brief PORTE pin index: 30 */
-                                            /* @} */
-
 /*! @name PORTC1 (number 56), J10[12]/U6[31]/A5
   @{ */
 #define BOARD_INITPINS_VolumeInput_PORT PORTC /*!<@brief PORT device name: PORTC */
 #define BOARD_INITPINS_VolumeInput_PIN 1U     /*!<@brief PORTC pin index: 1 */
                                               /* @} */
-
-/*! @name PORTC2 (number 57), J10[10]/A4
-  @{ */
-#define BOARD_INITPINS_VolumeOutput_PORT PORTC /*!<@brief PORT device name: PORTC */
-#define BOARD_INITPINS_VolumeOutput_PIN 2U     /*!<@brief PORTC pin index: 2 */
-                                               /* @} */
 
 /*! @name PORTB0 (number 43), J10[2]/A0
   @{ */
@@ -123,6 +109,12 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_Play_PORT PORTB /*!<@brief PORT device name: PORTB */
 #define BOARD_INITPINS_Play_PIN 2U     /*!<@brief PORTB pin index: 2 */
                                        /* @} */
+
+/*! @name PORTC2 (number 57), J10[10]/A4
+  @{ */
+#define BOARD_INITPINS_VolumeOutput_PORT PORTC /*!<@brief PORT device name: PORTC */
+#define BOARD_INITPINS_VolumeOutput_PIN 2U     /*!<@brief PORTC pin index: 2 */
+                                               /* @} */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

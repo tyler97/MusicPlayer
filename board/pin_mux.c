@@ -58,12 +58,11 @@ BOARD_InitPins:
   - {pin_num: '15', peripheral: GPIOE, signal: 'GPIO, 22', pin_signal: ADC0_DP3/ADC0_SE3/PTE22/TPM2_CH0/UART2_TX, direction: OUTPUT}
   - {pin_num: '16', peripheral: GPIOE, signal: 'GPIO, 23', pin_signal: ADC0_DM3/ADC0_SE7a/PTE23/TPM2_CH1/UART2_RX, direction: OUTPUT}
   - {pin_num: '21', peripheral: GPIOE, signal: 'GPIO, 29', pin_signal: CMP0_IN5/ADC0_SE4b/PTE29/TPM0_CH2/TPM_CLKIN0, direction: OUTPUT}
-  - {pin_num: '22', peripheral: GPIOE, signal: 'GPIO, 30', pin_signal: DAC0_OUT/ADC0_SE23/CMP0_IN4/PTE30/TPM0_CH3/TPM_CLKIN1, direction: OUTPUT}
   - {pin_num: '56', peripheral: ADC0, signal: 'SE, 15', pin_signal: ADC0_SE15/TSI0_CH14/PTC1/LLWU_P6/RTC_CLKIN/I2C1_SCL/TPM0_CH0}
-  - {pin_num: '57', peripheral: TPM0, signal: 'CH, 1', pin_signal: ADC0_SE11/TSI0_CH15/PTC2/I2C1_SDA/TPM0_CH1, direction: OUTPUT}
   - {pin_num: '43', peripheral: GPIOB, signal: 'GPIO, 0', pin_signal: ADC0_SE8/TSI0_CH0/PTB0/LLWU_P5/I2C0_SCL/TPM1_CH0, direction: INPUT}
   - {pin_num: '44', peripheral: GPIOB, signal: 'GPIO, 1', pin_signal: ADC0_SE9/TSI0_CH6/PTB1/I2C0_SDA/TPM1_CH1, identifier: Next, direction: INPUT}
   - {pin_num: '45', peripheral: GPIOB, signal: 'GPIO, 2', pin_signal: ADC0_SE12/TSI0_CH7/PTB2/I2C0_SCL/TPM2_CH0, identifier: Play, direction: INPUT}
+  - {pin_num: '57', peripheral: TPM0, signal: 'CH, 1', pin_signal: ADC0_SE11/TSI0_CH15/PTC2/I2C1_SDA/TPM0_CH1, direction: OUTPUT}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -141,13 +140,6 @@ void BOARD_InitPins(void)
     /* Initialize GPIO functionality on pin PTE29 (pin 21)  */
     GPIO_PinInit(BOARD_INITPINS_TrackLED2_GPIO, BOARD_INITPINS_TrackLED2_PIN, &TrackLED2_config);
 
-    gpio_pin_config_t VolumeLED_config = {
-        .pinDirection = kGPIO_DigitalOutput,
-        .outputLogic = 0U
-    };
-    /* Initialize GPIO functionality on pin PTE30 (pin 22)  */
-    GPIO_PinInit(BOARD_INITPINS_VolumeLED_GPIO, BOARD_INITPINS_VolumeLED_PIN, &VolumeLED_config);
-
     /* PORTA1 (pin 27) is configured as UART0_RX */
     PORT_SetPinMux(BOARD_INITPINS_DEBUG_UART_RX_PORT, BOARD_INITPINS_DEBUG_UART_RX_PIN, kPORT_MuxAlt2);
 
@@ -183,9 +175,6 @@ void BOARD_InitPins(void)
 
     /* PORTE29 (pin 21) is configured as PTE29 */
     PORT_SetPinMux(BOARD_INITPINS_TrackLED2_PORT, BOARD_INITPINS_TrackLED2_PIN, kPORT_MuxAsGpio);
-
-    /* PORTE30 (pin 22) is configured as PTE30 */
-    PORT_SetPinMux(BOARD_INITPINS_VolumeLED_PORT, BOARD_INITPINS_VolumeLED_PIN, kPORT_MuxAsGpio);
 
     SIM->SOPT5 = ((SIM->SOPT5 &
                    /* Mask bits to zero which are setting */
