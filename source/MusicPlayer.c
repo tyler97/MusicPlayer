@@ -37,11 +37,10 @@
 
 #include "init.h"
 
-/* TODO: insert other definitions and declarations here. */
-
 /*
  * @brief   Application entry point.
  */
+
 int main(void) {
 
 	InitBoard();
