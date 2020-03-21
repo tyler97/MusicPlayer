@@ -17,7 +17,7 @@ PTE20: Song LED 1
 PTE21: Song LED 2  
 PTE22: Song LED 3  
   
-PTE23: Track LED 1
+PTE23: Track LED 1  
 PTE29: Track LED 2  
   
 PTC2: Volume LED  
