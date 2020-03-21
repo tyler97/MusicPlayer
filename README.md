@@ -9,8 +9,7 @@ Development Board: FRDM-KL25Z
 
 ### Development Board Pins
 
-![Board Pins](/misc/board.jpg)
-Format: ![Alt Text](url)  
+![Board Pins](/misc/board.jpg)  
  
 #### Output Pins  
 
