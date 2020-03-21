@@ -37,16 +37,73 @@
 
 #include "init.h"
 
+static uint8_t flagPIT0 = 0;
+
 /*
  * @brief   Application entry point.
  */
 
+/* Variables for TPM */
+tpm_config_t tpmInfo;
+tpm_chnl_pwm_signal_param_t tpmParam;
+
+/* Variables for ADC16 */
+adc16_config_t adc16ConfigStruct;
+adc16_channel_config_t adc16ChannelConfigStruct;
+
+/* Variables for PIT */
+pit_config_t My_PIT;
+uint8_t flagPTI0 = 0;
+
+void InitAll(void);
+
 int main(void) {
 
-	InitBoard();
+	InitAll();
+
+	uint32_t adc = 0;
     while(1)
     {
 
+    	if(flagPIT0)
+    	{
+            flagPIT0 = 0;
+
+            ADC16_SetChannelConfig(ADC0, ADC_CHANNEL_GROUP, &adc16ChannelConfigStruct);
+
+            while (0U == (kADC16_ChannelConversionDoneFlag &
+                          ADC16_GetChannelStatusFlags(ADC0, ADC_CHANNEL_GROUP)))
+            {
+            	//wait...
+            }
+            adc = ADC16_GetChannelConversionValue(ADC0, ADC_CHANNEL_GROUP);
+            adc /= 409;
+
+            PRINTF("ADC VALUE: %d\n" , adc);
+
+    		TPM_UpdatePwmDutycycle(TPM0, kTPM_Chnl_1, kTPM_CenterAlignedPwm, adc * 10);
+
+    	}
     }
     return 0 ;
+}
+
+void InitAll(void)
+{
+	InitBoard();
+	InitADC(&adc16ConfigStruct, &adc16ChannelConfigStruct);
+	InitPIT(&My_PIT);
+	InitTPM(&tpmInfo, &tpmParam);
+}
+
+//Interrupt Handler for PIT TIMER
+void PIT_DriverIRQHandler(void){
+
+	flagPIT0 = PIT_GetStatusFlags(PIT,kPIT_Chnl_0);
+
+	if(flagPIT0)
+	{
+		PIT_ClearStatusFlags(PIT,kPIT_Chnl_0, kPIT_TimerFlag);
+	}
+
 }
