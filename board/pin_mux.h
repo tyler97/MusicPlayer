@@ -88,6 +88,18 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_VolumeLED_PIN 30U    /*!<@brief PORTE pin index: 30 */
                                             /* @} */
 
+/*! @name PORTC1 (number 56), J10[12]/U6[31]/A5
+  @{ */
+#define BOARD_INITPINS_VolumeInput_PORT PORTC /*!<@brief PORT device name: PORTC */
+#define BOARD_INITPINS_VolumeInput_PIN 1U     /*!<@brief PORTC pin index: 1 */
+                                              /* @} */
+
+/*! @name PORTC2 (number 57), J10[10]/A4
+  @{ */
+#define BOARD_INITPINS_VolumeOutput_PORT PORTC /*!<@brief PORT device name: PORTC */
+#define BOARD_INITPINS_VolumeOutput_PIN 2U     /*!<@brief PORTC pin index: 2 */
+                                               /* @} */
+
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *

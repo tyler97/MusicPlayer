@@ -20,6 +20,8 @@ pin_labels:
 - {pin_num: '16', pin_signal: ADC0_DM3/ADC0_SE7a/PTE23/TPM2_CH1/UART2_RX, label: 'J10[7]', identifier: TrackLED1}
 - {pin_num: '21', pin_signal: CMP0_IN5/ADC0_SE4b/PTE29/TPM0_CH2/TPM_CLKIN0, label: 'J10[9]', identifier: TrackLED2}
 - {pin_num: '22', pin_signal: DAC0_OUT/ADC0_SE23/CMP0_IN4/PTE30/TPM0_CH3/TPM_CLKIN1, label: 'J10[11]', identifier: VolumeLED}
+- {pin_num: '56', pin_signal: ADC0_SE15/TSI0_CH14/PTC1/LLWU_P6/RTC_CLKIN/I2C1_SCL/TPM0_CH0, label: 'J10[12]/U6[31]/A5', identifier: VolumeInput}
+- {pin_num: '57', pin_signal: ADC0_SE11/TSI0_CH15/PTC2/I2C1_SDA/TPM0_CH1, label: 'J10[10]/A4', identifier: VolumeOutput}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -54,6 +56,8 @@ BOARD_InitPins:
   - {pin_num: '16', peripheral: GPIOE, signal: 'GPIO, 23', pin_signal: ADC0_DM3/ADC0_SE7a/PTE23/TPM2_CH1/UART2_RX, direction: OUTPUT}
   - {pin_num: '21', peripheral: GPIOE, signal: 'GPIO, 29', pin_signal: CMP0_IN5/ADC0_SE4b/PTE29/TPM0_CH2/TPM_CLKIN0, direction: OUTPUT}
   - {pin_num: '22', peripheral: GPIOE, signal: 'GPIO, 30', pin_signal: DAC0_OUT/ADC0_SE23/CMP0_IN4/PTE30/TPM0_CH3/TPM_CLKIN1, direction: OUTPUT}
+  - {pin_num: '56', peripheral: ADC0, signal: 'SE, 15', pin_signal: ADC0_SE15/TSI0_CH14/PTC1/LLWU_P6/RTC_CLKIN/I2C1_SCL/TPM0_CH0}
+  - {pin_num: '57', peripheral: TPM0, signal: 'CH, 1', pin_signal: ADC0_SE11/TSI0_CH15/PTC2/I2C1_SDA/TPM0_CH1, direction: OUTPUT}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -68,6 +72,8 @@ void BOARD_InitPins(void)
 {
     /* Port A Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortA);
+    /* Port C Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortC);
     /* Port E Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortE);
 
@@ -118,6 +124,12 @@ void BOARD_InitPins(void)
 
     /* PORTA2 (pin 28) is configured as UART0_TX */
     PORT_SetPinMux(BOARD_INITPINS_DEBUG_UART_TX_PORT, BOARD_INITPINS_DEBUG_UART_TX_PIN, kPORT_MuxAlt2);
+
+    /* PORTC1 (pin 56) is configured as ADC0_SE15 */
+    PORT_SetPinMux(BOARD_INITPINS_VolumeInput_PORT, BOARD_INITPINS_VolumeInput_PIN, kPORT_PinDisabledOrAnalog);
+
+    /* PORTC2 (pin 57) is configured as TPM0_CH1 */
+    PORT_SetPinMux(BOARD_INITPINS_VolumeOutput_PORT, BOARD_INITPINS_VolumeOutput_PIN, kPORT_MuxAlt4);
 
     /* PORTE20 (pin 13) is configured as PTE20 */
     PORT_SetPinMux(BOARD_INITPINS_SongLED1_PORT, BOARD_INITPINS_SongLED1_PIN, kPORT_MuxAsGpio);
