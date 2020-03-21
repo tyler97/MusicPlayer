@@ -28,7 +28,7 @@ PTB0: Prev/Backward button
 PTB1: Next/Fordward button  
 PTB2: Play/Pause/Stop button  
   
-PTC1: Analong input  
+PTC1: Analog input  
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
