@@ -24,9 +24,9 @@ PTC2: Volume LED
   
 #### Input Pins  
   
-PTB0: Prev/Backward button  
-PTB1: Next/Fordward button  
-PTB2: Play/Pause/Stop button  
+PTD2: Prev/Backward button  
+PTD0: Next/Fordward button  
+PTD5: Play/Pause/Stop button  
   
 PTC1: Analong input  
 
