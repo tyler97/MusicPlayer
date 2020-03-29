@@ -28,7 +28,7 @@ PTD2: Prev/Backward button
 PTD0: Next/Fordward button  
 PTD5: Play/Pause/Stop button  
   
-PTC1: Analog input  
+PTC1: Analong input  
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
