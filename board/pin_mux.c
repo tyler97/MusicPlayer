@@ -25,9 +25,6 @@ pin_labels:
 - {pin_num: '45', pin_signal: ADC0_SE12/TSI0_CH7/PTB2/I2C0_SCL/TPM2_CH0, label: 'J10[6]/A2', identifier: PlayButton;Play}
 - {pin_num: '56', pin_signal: ADC0_SE15/TSI0_CH14/PTC1/LLWU_P6/RTC_CLKIN/I2C1_SCL/TPM0_CH0, label: 'J10[12]/U6[31]/A5', identifier: VolumeInput}
 - {pin_num: '57', pin_signal: ADC0_SE11/TSI0_CH15/PTC2/I2C1_SDA/TPM0_CH1, label: 'J10[10]/A4', identifier: VolumeOutput}
-- {pin_num: '73', pin_signal: PTD0/SPI0_PCS0/TPM0_CH0, label: 'J2[6]/D10', identifier: Next}
-- {pin_num: '75', pin_signal: PTD2/SPI0_MOSI/UART2_RX/TPM0_CH2/SPI0_MISO, label: 'J2[8]/D11', identifier: Prev}
-- {pin_num: '78', pin_signal: ADC0_SE6b/PTD5/SPI1_SCK/UART2_TX/TPM0_CH5, label: 'J2[4]/D9', identifier: Play}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -58,13 +55,13 @@ BOARD_InitPins:
   - {pin_num: '13', peripheral: GPIOE, signal: 'GPIO, 20', pin_signal: ADC0_DP0/ADC0_SE0/PTE20/TPM1_CH0/UART0_TX, direction: OUTPUT}
   - {pin_num: '14', peripheral: GPIOE, signal: 'GPIO, 21', pin_signal: ADC0_DM0/ADC0_SE4a/PTE21/TPM1_CH1/UART0_RX, direction: OUTPUT}
   - {pin_num: '21', peripheral: GPIOE, signal: 'GPIO, 29', pin_signal: CMP0_IN5/ADC0_SE4b/PTE29/TPM0_CH2/TPM_CLKIN0, direction: OUTPUT}
+  - {pin_num: '43', peripheral: GPIOB, signal: 'GPIO, 0', pin_signal: ADC0_SE8/TSI0_CH0/PTB0/LLWU_P5/I2C0_SCL/TPM1_CH0, direction: INPUT}
+  - {pin_num: '44', peripheral: GPIOB, signal: 'GPIO, 1', pin_signal: ADC0_SE9/TSI0_CH6/PTB1/I2C0_SDA/TPM1_CH1, identifier: Next, direction: INPUT}
+  - {pin_num: '45', peripheral: GPIOB, signal: 'GPIO, 2', pin_signal: ADC0_SE12/TSI0_CH7/PTB2/I2C0_SCL/TPM2_CH0, identifier: Play, direction: INPUT}
   - {pin_num: '22', peripheral: GPIOE, signal: 'GPIO, 30', pin_signal: DAC0_OUT/ADC0_SE23/CMP0_IN4/PTE30/TPM0_CH3/TPM_CLKIN1, direction: OUTPUT, gpio_init_state: 'false'}
   - {pin_num: '16', peripheral: GPIOE, signal: 'GPIO, 23', pin_signal: ADC0_DM3/ADC0_SE7a/PTE23/TPM2_CH1/UART2_RX, direction: OUTPUT}
   - {pin_num: '56', peripheral: ADC0, signal: 'SE, 15', pin_signal: ADC0_SE15/TSI0_CH14/PTC1/LLWU_P6/RTC_CLKIN/I2C1_SCL/TPM0_CH0}
   - {pin_num: '57', peripheral: TPM0, signal: 'CH, 1', pin_signal: ADC0_SE11/TSI0_CH15/PTC2/I2C1_SDA/TPM0_CH1, direction: OUTPUT}
-  - {pin_num: '78', peripheral: GPIOD, signal: 'GPIO, 5', pin_signal: ADC0_SE6b/PTD5/SPI1_SCK/UART2_TX/TPM0_CH5, direction: INPUT}
-  - {pin_num: '73', peripheral: GPIOD, signal: 'GPIO, 0', pin_signal: PTD0/SPI0_PCS0/TPM0_CH0, direction: INPUT}
-  - {pin_num: '75', peripheral: GPIOD, signal: 'GPIO, 2', pin_signal: PTD2/SPI0_MOSI/UART2_RX/TPM0_CH2/SPI0_MISO, direction: INPUT}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -79,32 +76,32 @@ void BOARD_InitPins(void)
 {
     /* Port A Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortA);
+    /* Port B Clock Gate Control: Clock enabled */
+    CLOCK_EnableClock(kCLOCK_PortB);
     /* Port C Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortC);
-    /* Port D Clock Gate Control: Clock enabled */
-    CLOCK_EnableClock(kCLOCK_PortD);
     /* Port E Clock Gate Control: Clock enabled */
     CLOCK_EnableClock(kCLOCK_PortE);
-
-    gpio_pin_config_t Next_config = {
-        .pinDirection = kGPIO_DigitalInput,
-        .outputLogic = 0U
-    };
-    /* Initialize GPIO functionality on pin PTD0 (pin 73)  */
-    GPIO_PinInit(BOARD_INITPINS_Next_GPIO, BOARD_INITPINS_Next_PIN, &Next_config);
 
     gpio_pin_config_t Prev_config = {
         .pinDirection = kGPIO_DigitalInput,
         .outputLogic = 0U
     };
-    /* Initialize GPIO functionality on pin PTD2 (pin 75)  */
+    /* Initialize GPIO functionality on pin PTB0 (pin 43)  */
     GPIO_PinInit(BOARD_INITPINS_Prev_GPIO, BOARD_INITPINS_Prev_PIN, &Prev_config);
+
+    gpio_pin_config_t Next_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PTB1 (pin 44)  */
+    GPIO_PinInit(BOARD_INITPINS_Next_GPIO, BOARD_INITPINS_Next_PIN, &Next_config);
 
     gpio_pin_config_t Play_config = {
         .pinDirection = kGPIO_DigitalInput,
         .outputLogic = 0U
     };
-    /* Initialize GPIO functionality on pin PTD5 (pin 78)  */
+    /* Initialize GPIO functionality on pin PTB2 (pin 45)  */
     GPIO_PinInit(BOARD_INITPINS_Play_GPIO, BOARD_INITPINS_Play_PIN, &Play_config);
 
     gpio_pin_config_t TrackLED2_config = {
@@ -148,20 +145,20 @@ void BOARD_InitPins(void)
     /* PORTA2 (pin 28) is configured as UART0_TX */
     PORT_SetPinMux(BOARD_INITPINS_DEBUG_UART_TX_PORT, BOARD_INITPINS_DEBUG_UART_TX_PIN, kPORT_MuxAlt2);
 
+    /* PORTB0 (pin 43) is configured as PTB0 */
+    PORT_SetPinMux(BOARD_INITPINS_Prev_PORT, BOARD_INITPINS_Prev_PIN, kPORT_MuxAsGpio);
+
+    /* PORTB1 (pin 44) is configured as PTB1 */
+    PORT_SetPinMux(BOARD_INITPINS_Next_PORT, BOARD_INITPINS_Next_PIN, kPORT_MuxAsGpio);
+
+    /* PORTB2 (pin 45) is configured as PTB2 */
+    PORT_SetPinMux(BOARD_INITPINS_Play_PORT, BOARD_INITPINS_Play_PIN, kPORT_MuxAsGpio);
+
     /* PORTC1 (pin 56) is configured as ADC0_SE15 */
     PORT_SetPinMux(BOARD_INITPINS_VolumeInput_PORT, BOARD_INITPINS_VolumeInput_PIN, kPORT_PinDisabledOrAnalog);
 
     /* PORTC2 (pin 57) is configured as TPM0_CH1 */
     PORT_SetPinMux(BOARD_INITPINS_VolumeOutput_PORT, BOARD_INITPINS_VolumeOutput_PIN, kPORT_MuxAlt4);
-
-    /* PORTD0 (pin 73) is configured as PTD0 */
-    PORT_SetPinMux(BOARD_INITPINS_Next_PORT, BOARD_INITPINS_Next_PIN, kPORT_MuxAsGpio);
-
-    /* PORTD2 (pin 75) is configured as PTD2 */
-    PORT_SetPinMux(BOARD_INITPINS_Prev_PORT, BOARD_INITPINS_Prev_PIN, kPORT_MuxAsGpio);
-
-    /* PORTD5 (pin 78) is configured as PTD5 */
-    PORT_SetPinMux(BOARD_INITPINS_Play_PORT, BOARD_INITPINS_Play_PIN, kPORT_MuxAsGpio);
 
     /* PORTE20 (pin 13) is configured as PTE20 */
     PORT_SetPinMux(BOARD_INITPINS_TrackLED2_PORT, BOARD_INITPINS_TrackLED2_PIN, kPORT_MuxAsGpio);
