@@ -101,3 +101,4 @@ void InitTPM(tpm_config_t * tpmInfo, tpm_chnl_pwm_signal_param_t * tpmParam)
 }
 
 #endif /* INIT_H_ */
+
