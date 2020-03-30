@@ -15,6 +15,7 @@
 #include "fsl_tpm.h"
 #include "fsl_pit.h"
 #include "fsl_adc16.h"
+#include "fsl_lptmr.h"
 #include "MKL25Z4.h"
 #include "fsl_debug_console.h"
 
@@ -48,6 +49,10 @@ void InitPIT(pit_config_t * My_PIT)
     PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, MSEC_TO_COUNT(100,PIT_CLK_SRC_HZ_HP));
     PIT_EnableInterrupts(PIT,kPIT_Chnl_0, kPIT_TimerInterruptEnable);
     PIT_StopTimer(PIT, kPIT_Chnl_0);
+
+    //Setup timer for debounce...
+    PIT_SetTimerPeriod(PIT, kPIT_Chnl_1, MSEC_TO_COUNT(1100,PIT_CLK_SRC_HZ_HP));
+    PIT_StopTimer(PIT, kPIT_Chnl_1);
 
     //Enabling Interrupts
     EnableIRQ(PIT_IRQn);
@@ -97,6 +102,21 @@ void InitTPM(tpm_config_t * tpmInfo, tpm_chnl_pwm_signal_param_t * tpmParam)
 
     TPM_SetupPwm(TPM0, tpmParam, 1U, kTPM_CenterAlignedPwm, 24000U, TPM_SOURCE_CLOCK);
     TPM_StartTimer(TPM0, kTPM_SystemClock);
+
+}
+
+void InitLPTMR(void)
+{
+	lptmr_config_t lptmrConfig;
+
+	LPTMR_GetDefaultConfig(&lptmrConfig);
+    /* Initializes the LPTMR */
+
+    LPTMR_Init(LPTMR0, &lptmrConfig);
+
+	/* Sets the timer period */
+
+    LPTMR_SetTimerPeriod(LPTMR0, MSEC_TO_COUNT(2000U, LPO_CLK_FREQ));
 
 }
 

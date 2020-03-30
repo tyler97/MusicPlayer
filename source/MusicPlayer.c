@@ -36,6 +36,7 @@
 /* TODO: insert other include files here. */
 
 #include "init.h"
+#include "debouncer.h"
 
 static uint8_t flagPIT0 = 0;
 
@@ -56,36 +57,99 @@ pit_config_t My_PIT;
 uint8_t flagPTI0 = 0;
 
 void InitAll(void);
+void ChangeVolume(void);
+void TimerCheck(debounceInfo*, uint8_t);
+
+typedef struct
+{
+	uint32_t pin;
+	GPIO_Type * base;
+
+}gpioPin;
+
+gpioPin buttonPins[3] = {
+		{0, GPIOB},
+		{1, GPIOB},
+		{2, GPIOB}
+};
 
 int main(void) {
 
+	debounceInfo buttonStates[3];
+
+	for(uint8_t i = 0; i < 3; i++)
+	{
+		InitDebounce(&buttonStates[i]);
+	}
+
 	InitAll();
 
-	uint32_t adc = 0;
     while(1)
     {
 
     	if(flagPIT0)
     	{
-            flagPIT0 = 0;
+    		flagPIT0 = 0U;
+    		ChangeVolume();
 
-            ADC16_SetChannelConfig(ADC0, ADC_CHANNEL_GROUP, &adc16ChannelConfigStruct);
+    		/*for(uint8_t i = 0; i < 3; i++)
+    		{
+    			PRINTF("%d -", buttonStates[i].state);
+    		}
 
-            while (0U == (kADC16_ChannelConversionDoneFlag &
-                          ADC16_GetChannelStatusFlags(ADC0, ADC_CHANNEL_GROUP)))
-            {
-            	//wait...
-            }
-            adc = ADC16_GetChannelConversionValue(ADC0, ADC_CHANNEL_GROUP);
-            adc /= 409;
-
-            PRINTF("ADC VALUE: %d\n" , adc);
-
-    		TPM_UpdatePwmDutycycle(TPM0, kTPM_Chnl_1, kTPM_CenterAlignedPwm, adc * 10);
+    		PRINTF("\n");*/
 
     	}
+
+    	for(uint8_t i = 0; i < 3; i++)
+    	{
+    		buttonStates[i].input = GPIO_ReadPinInput(buttonPins[i].base, buttonPins[i].pin);
+    		debouncer(&buttonStates[i]);
+    	}
+
+    	TimerCheck(buttonStates, 3U);
+
+
     }
     return 0 ;
+}
+
+void TimerCheck(debounceInfo* buttonArray, uint8_t size)
+{
+	uint8_t flag = 1U;
+
+	for(uint8_t i = 0; i < size; i++)
+	{
+		if(buttonArray[i].state == pressed)
+		{
+			flag = 0U;
+		}
+	}
+
+	if(flag == 1U)
+	{
+		LPTMR_StopTimer(LPTMR0);
+	}
+
+}
+
+void ChangeVolume(void)
+{
+
+	uint32_t adc = 0;
+
+	ADC16_SetChannelConfig(ADC0, ADC_CHANNEL_GROUP, &adc16ChannelConfigStruct);
+
+	while (0U == (kADC16_ChannelConversionDoneFlag &
+				  ADC16_GetChannelStatusFlags(ADC0, ADC_CHANNEL_GROUP)))
+	{
+		//wait...
+	}
+	adc = ADC16_GetChannelConversionValue(ADC0, ADC_CHANNEL_GROUP);
+	adc /= 409;
+
+	TPM_UpdatePwmDutycycle(TPM0, kTPM_Chnl_1, kTPM_CenterAlignedPwm, adc * 10);
+
 }
 
 void InitAll(void)
@@ -94,6 +158,7 @@ void InitAll(void)
 	InitADC(&adc16ConfigStruct, &adc16ChannelConfigStruct);
 	InitPIT(&My_PIT);
 	InitTPM(&tpmInfo, &tpmParam);
+	InitLPTMR();
 }
 
 //Interrupt Handler for PIT TIMER

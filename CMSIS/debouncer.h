@@ -8,167 +8,125 @@
 #ifndef DEBOUNCER_H_
 #define DEBOUNCER_H_
 
-#define DISABLE 0
-#define ENABLE 1
-#define HIGH 1
-#define LOW 0
+#include "fsl_lptmr.h"
+#include "fsl_debug_console.h"
 
-typedef enum
-{
-    DISABLES,
-    COUNT_ENABLE,
-    ENABLES,
-    COUNT_DIS,
-    NUM_OF_STATES
+#define TIME_INIT 0
+#define LOW 0
+#define HIGH 1
+
+typedef enum{
+
+	notPressed = 0,
+	pressed,
+	shortPress,
+	longPress,
+	invalid
 
 }DEBOUNCE_STATE;
 
 typedef struct
 {
     DEBOUNCE_STATE state;
-    uint32_t input;
-    uint32_t output;
-    uint32_t counter;
+    uint8_t input;
+    uint32_t time;
 
-}machineInfo;
+}debounceInfo;
 
-//prototypes
-void Init(machineInfo * info);
-void disableToCountEnable(machineInfo * info);
-void countEnableToDisable(machineInfo * info);
-void countEnableToCountEnable(machineInfo * info);
-void countEnableToEnable(machineInfo * info);
-void enableToCountDisable(machineInfo * info);
-void countDisableToCountDisable(machineInfo * info);
-void countDisableToEnable(machineInfo * info);
-void countDisableToDisable(machineInfo * info);
 
-//event functions
-void disableToCountEnable(machineInfo * info)
+void InitDebounce(debounceInfo * info)
 {
-    info->counter = 0;
-    info->output = DISABLE;
-    info->state = COUNT_ENABLE;
+	info->state = notPressed;
+	info->input = LOW;
+	info->time = TIME_INIT;
 }
 
-void countEnableToDisable(machineInfo * info)
-{
-    info->counter = 0;
-    info->output = DISABLE;
-    info->state = DISABLES;
-
-}
-
-void countEnableToCountEnable(machineInfo * info)
-{
-    info->counter = info->counter + 1;
-    info->output = DISABLE;
-    info->state = COUNT_ENABLE;
-
-}
-
-void countEnableToEnable(machineInfo * info)
-{
-    info->output = ENABLE;
-    info->state = ENABLES;
-
-}
-
-void enableToCountDisable(machineInfo * info)
-{
-    info->counter = 0;
-    info->output = ENABLE;
-    info->state = COUNT_DIS;
-}
-
-void countDisableToCountDisable(machineInfo * info)
-{
-    info->counter = info->counter + 1;
-    info->output = ENABLE;
-    info->state = COUNT_DIS;
-
-}
-
-void countDisableToEnable(machineInfo * info)
-{
-    info->counter = 0;
-    info->output = ENABLE;
-    info->state = ENABLES;
-
-}
-
-void countDisableToDisable(machineInfo * info)
-{
-    info->output = DISABLE;
-    info->state = DISABLES;
-}
-
-void Init(machineInfo * info)
-{
-    info->counter = 0;
-    info->input = LOW;
-    info->output = DISABLE;
-    info->state = DISABLES;
-}
-
-//state machine
-void debouncer(machineInfo * info)
+void debouncer(debounceInfo * stateMachine)
 {
 
-    switch(info->state)
-    {
-    case DISABLES:
+	uint32_t totalTime;
 
-        if(info->input == HIGH)
-        {
-            disableToCountEnable(info);
-        }
+	switch(stateMachine->state)
+	{
 
-        break;
-    case COUNT_ENABLE:
+	case notPressed:
 
-        if((info->input == HIGH) && (info->counter >= 4))
-        {
-            countEnableToEnable(info);
-        }
-        else if(info->input == HIGH)
-        {
-            countEnableToCountEnable(info);
-        }
-        else if(info->input == LOW)
-        {
-            countEnableToDisable(info);
-        }
+		if(stateMachine->input == HIGH)
+		{
 
-        break;
-    case ENABLES:
+			stateMachine->time  =  LPTMR_GetCurrentTimerCount(LPTMR0);
 
-        if(info->input == LOW)
-        {
-            enableToCountDisable(info);
-        }
+			if(stateMachine->time == 0U)
+			{
+				LPTMR_StartTimer(LPTMR0);
+			}
 
-        break;
-    case COUNT_DIS:
+			stateMachine->state = pressed;
 
-        if(info->input == HIGH)
-        {
-            countDisableToEnable(info);
-        }
-        else if((info->input == LOW) && (info->counter >= 3))
-        {
-            countDisableToDisable(info);
-        }
-        else if(info->input == LOW)
-        {
-            countDisableToCountDisable(info);
-        }
+		}
+		else
+		{
 
-        break;
+		}
 
-    default:
-        break;
-    }
+		break;
+	case pressed:
+
+		totalTime = LPTMR_GetCurrentTimerCount(LPTMR0) - stateMachine->time;
+
+		if(stateMachine->input == LOW && totalTime <= 49 && totalTime >= 35)
+		{
+
+			stateMachine->state = notPressed;
+
+		}
+		else if(stateMachine->input == LOW && totalTime >= 50U && totalTime <= 1000U)
+		{
+
+			PRINTF("SHORT PRESS");
+			stateMachine->state = shortPress;
+
+		}
+		else if(stateMachine->input == LOW && totalTime >= 1000U)
+		{
+			PRINTF("LONG PRESS");
+
+			stateMachine->state = longPress;
+
+		}
+
+		else
+		{
+
+			stateMachine->state = pressed;
+
+		}
+
+		break;
+
+	case shortPress:
+
+		stateMachine->state = notPressed;
+		stateMachine->time = TIME_INIT;
+
+		break;
+
+	case longPress:
+
+		stateMachine->state = notPressed;
+		stateMachine->time = TIME_INIT;
+
+		break;
+
+	default:
+
+		stateMachine->state = notPressed;
+		stateMachine->time = TIME_INIT;
+
+		break;
+
+	}
+
 }
 
 #endif /* DEBOUNCER_H_ */
