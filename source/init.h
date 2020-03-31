@@ -51,12 +51,14 @@ void InitPIT(pit_config_t * My_PIT)
     PIT_StopTimer(PIT, kPIT_Chnl_0);
 
     //Setup timer for debounce...
-    PIT_SetTimerPeriod(PIT, kPIT_Chnl_1, MSEC_TO_COUNT(1100,PIT_CLK_SRC_HZ_HP));
+    PIT_SetTimerPeriod(PIT, kPIT_Chnl_1, MSEC_TO_COUNT(6000U,PIT_CLK_SRC_HZ_HP));
+    PIT_DisableInterrupts(PIT, kPIT_Chnl_1, kPIT_TimerInterruptEnable);
     PIT_StopTimer(PIT, kPIT_Chnl_1);
 
     //Enabling Interrupts
     EnableIRQ(PIT_IRQn);
     PIT_StartTimer(PIT,kPIT_Chnl_0);
+    PIT_StartTimer(PIT, kPIT_Chnl_1);
 
 }
 

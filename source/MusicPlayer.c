@@ -39,11 +39,6 @@
 
 static uint8_t flagPIT0 = 0;
 
-#define PLAY 0
-#define NEXT 1
-#define PREV 2
-#define NUM_BUTTONS 3
-
 /*
  * @brief   Application entry point.
  */
@@ -60,35 +55,66 @@ adc16_channel_config_t adc16ChannelConfigStruct;
 pit_config_t My_PIT;
 uint8_t flagPTI0 = 0;
 
+gpioPin buttonPins[NUM_BUTTONS] = {
+		{0, GPIOB},
+		{1, GPIOB},
+		{2, GPIOB}
+};
+
+gpioPin trackPins[2] = {
+		{21, GPIOE},
+		{20, GPIOE}
+};
+
+gpioPin songPins[3] = {
+		{30, GPIOE},
+		{29, GPIOE},
+		{23, GPIOE}
+};
+
+actions buttonActions[NUM_BUTTONS] = {
+		{playPause,stop},
+		{next, forward},
+		{prev, backward}
+};
+
 void InitAll(void);
 void ChangeVolume(void);
 
 int main(void) {
 
-	gpioPin buttonPins[NUM_BUTTONS] = {
-			{0, GPIOB},
-			{1, GPIOB},
-			{2, GPIOB}
-	};
-
-	actions buttonActions[NUM_BUTTONS] = {
-			{playPause,stop},
-			{next, forward},
-			{prev, backword}
-	};
-
 	debounceInfo buttonStates[NUM_BUTTONS];
+
+	output pins[2] = {
+			{trackPins, 2U},
+			{songPins, 3U}
+	};
 
 	for(uint8_t i = 0; i < NUM_BUTTONS; i++)
 	{
 		InitDebounce(&buttonStates[i]);
 	}
 
+	inputButton buttons[NUM_BUTTONS];
+
+	for(uint8_t i = 0; i < NUM_BUTTONS; i++)
+	{
+		buttons[i].button = buttonStates[i];
+		buttons[i].action = buttonActions[i];
+		buttons[i].pin = buttonPins[i];
+	}
+
+	playerInfo mPlayer;
+	mPlayer.button = buttons;
+
 	InitAll();
+	InitPlayer(&mPlayer);
+
 
     while(1)
     {
 
+    	//changing volume...
     	if(flagPIT0)
     	{
     		flagPIT0 = 0U;
@@ -96,18 +122,27 @@ int main(void) {
 
     	}
 
+    	// reading input for each button...
     	for(uint8_t i = 0; i < NUM_BUTTONS; i++)
     	{
-    		buttonStates[i].input = GPIO_ReadPinInput(buttonPins[i].base, buttonPins[i].pin);
-    		debouncer(&buttonStates[i]);
+
+    		buttons[i].button.input = GPIO_ReadPinInput(buttons[i].pin.base, buttons[i].pin.pin);
+    		debouncer(&buttons[i].button);
+
     	}
 
-    	TimerCheck(buttonStates, NUM_BUTTONS);
-    	ButtonAction(buttonStates, buttonActions, NUM_BUTTONS);
+    	//getting actions for each button...
+    	buttonAction(buttons, NUM_BUTTONS);
 
+    	//calling state machine
+		MusicPlayer(&mPlayer, pins);
+
+		//cleaning timer if all buttons are off
+    	TimerCheck(buttons, NUM_BUTTONS);
 
     }
-    return 0 ;
+
+    return 0;
 }
 
 void ChangeVolume(void)

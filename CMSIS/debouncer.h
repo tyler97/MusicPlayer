@@ -32,7 +32,7 @@ typedef enum{
 	next,
 	forward,
 	prev,
-	backword,
+	backward,
 	none
 
 
@@ -104,13 +104,11 @@ void debouncer(debounceInfo * stateMachine)
 		else if(stateMachine->input == LOW && totalTime >= 50U && totalTime < 1000U)
 		{
 
-			PRINTF("SHORT PRESS");
 			stateMachine->state = shortPress;
 
 		}
-		else if(stateMachine->input == LOW && totalTime >= 1000U)
+		else if(stateMachine->input == HIGH && totalTime >= 1000U)
 		{
-			PRINTF("LONG PRESS");
 
 			stateMachine->state = longPress;
 
@@ -134,8 +132,15 @@ void debouncer(debounceInfo * stateMachine)
 
 	case longPress:
 
-		stateMachine->state = notPressed;
-		stateMachine->time = TIME_INIT;
+		if(stateMachine->input == HIGH)
+		{
+			stateMachine->state = longPress;
+		}
+		else
+		{
+			stateMachine->state = notPressed;
+			stateMachine->time = TIME_INIT;
+		}
 
 		break;
 
