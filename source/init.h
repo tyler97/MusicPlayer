@@ -116,7 +116,7 @@ void InitLPTMR(void)
 
 	/* Sets the timer period */
 
-    LPTMR_SetTimerPeriod(LPTMR0, MSEC_TO_COUNT(2000U, LPO_CLK_FREQ));
+    LPTMR_SetTimerPeriod(LPTMR0, MSEC_TO_COUNT(9000000U, LPO_CLK_FREQ));
 
 }
 

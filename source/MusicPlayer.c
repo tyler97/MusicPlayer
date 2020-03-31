@@ -35,10 +35,14 @@
 
 /* TODO: insert other include files here. */
 
-#include "init.h"
-#include "debouncer.h"
+#include "MusicPlayer.h"
 
 static uint8_t flagPIT0 = 0;
+
+#define PLAY 0
+#define NEXT 1
+#define PREV 2
+#define NUM_BUTTONS 3
 
 /*
  * @brief   Application entry point.
@@ -58,26 +62,24 @@ uint8_t flagPTI0 = 0;
 
 void InitAll(void);
 void ChangeVolume(void);
-void TimerCheck(debounceInfo*, uint8_t);
-
-typedef struct
-{
-	uint32_t pin;
-	GPIO_Type * base;
-
-}gpioPin;
-
-gpioPin buttonPins[3] = {
-		{0, GPIOB},
-		{1, GPIOB},
-		{2, GPIOB}
-};
 
 int main(void) {
 
-	debounceInfo buttonStates[3];
+	gpioPin buttonPins[NUM_BUTTONS] = {
+			{0, GPIOB},
+			{1, GPIOB},
+			{2, GPIOB}
+	};
 
-	for(uint8_t i = 0; i < 3; i++)
+	actions buttonActions[NUM_BUTTONS] = {
+			{playPause,stop},
+			{next, forward},
+			{prev, backword}
+	};
+
+	debounceInfo buttonStates[NUM_BUTTONS];
+
+	for(uint8_t i = 0; i < NUM_BUTTONS; i++)
 	{
 		InitDebounce(&buttonStates[i]);
 	}
@@ -92,45 +94,20 @@ int main(void) {
     		flagPIT0 = 0U;
     		ChangeVolume();
 
-    		/*for(uint8_t i = 0; i < 3; i++)
-    		{
-    			PRINTF("%d -", buttonStates[i].state);
-    		}
-
-    		PRINTF("\n");*/
-
     	}
 
-    	for(uint8_t i = 0; i < 3; i++)
+    	for(uint8_t i = 0; i < NUM_BUTTONS; i++)
     	{
     		buttonStates[i].input = GPIO_ReadPinInput(buttonPins[i].base, buttonPins[i].pin);
     		debouncer(&buttonStates[i]);
     	}
 
-    	TimerCheck(buttonStates, 3U);
+    	TimerCheck(buttonStates, NUM_BUTTONS);
+    	ButtonAction(buttonStates, buttonActions, NUM_BUTTONS);
 
 
     }
     return 0 ;
-}
-
-void TimerCheck(debounceInfo* buttonArray, uint8_t size)
-{
-	uint8_t flag = 1U;
-
-	for(uint8_t i = 0; i < size; i++)
-	{
-		if(buttonArray[i].state == pressed)
-		{
-			flag = 0U;
-		}
-	}
-
-	if(flag == 1U)
-	{
-		LPTMR_StopTimer(LPTMR0);
-	}
-
 }
 
 void ChangeVolume(void)
@@ -154,11 +131,13 @@ void ChangeVolume(void)
 
 void InitAll(void)
 {
+
 	InitBoard();
 	InitADC(&adc16ConfigStruct, &adc16ChannelConfigStruct);
 	InitPIT(&My_PIT);
 	InitTPM(&tpmInfo, &tpmParam);
 	InitLPTMR();
+
 }
 
 //Interrupt Handler for PIT TIMER

@@ -25,11 +25,32 @@ typedef enum{
 
 }DEBOUNCE_STATE;
 
+typedef enum{
+
+	playPause = 0,
+	stop,
+	next,
+	forward,
+	prev,
+	backword,
+	none
+
+
+}BUTTON_ACTION;
+
+typedef struct
+{
+	BUTTON_ACTION shortA;
+	BUTTON_ACTION longA;
+
+}actions;
+
 typedef struct
 {
     DEBOUNCE_STATE state;
     uint8_t input;
     uint32_t time;
+    BUTTON_ACTION action;
 
 }debounceInfo;
 
@@ -80,7 +101,7 @@ void debouncer(debounceInfo * stateMachine)
 			stateMachine->state = notPressed;
 
 		}
-		else if(stateMachine->input == LOW && totalTime >= 50U && totalTime <= 1000U)
+		else if(stateMachine->input == LOW && totalTime >= 50U && totalTime < 1000U)
 		{
 
 			PRINTF("SHORT PRESS");
