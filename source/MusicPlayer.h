@@ -50,7 +50,8 @@ typedef enum{
 	forwarding,
 	backwards,
 	pause,
-	onRelease
+	onRelease,
+	onReleasePause
 
 }PLAYER_STATES;
 
@@ -324,11 +325,28 @@ void MusicPlayer(playerInfo* player, output* pins)
 		}
 		else if(player->button[PLAY].button.action == stop)
 		{
+			player->curState = onReleasePause;
+
+		}
+
+		break;
+	case onReleasePause:
+
+		if(player->button[PLAY].button.action != stop)
+		{
 			player->curState = stopped;
+
+			player->track = Track(stop, player->track);
+			player->songPos = Song(stop, player->songPos);
+
 			player->counter = 0U;
 			player->period = 0U;
 
 			PIT_StopTimer(PIT, kPIT_Chnl_1);
+
+			WritePins(&pins[TRACKPIN], player->track);
+			WritePins(&pins[SONGPIN], player->songPos);
+
 		}
 
 		break;
