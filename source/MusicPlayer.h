@@ -4,6 +4,13 @@
  *  Created on: 30 mar. 2020
  *      Author: ruizt
  */
+/*
+*Ruiz Tyler Anthony
+*Celis Regalado Paulo Enrique
+*González Téllez José de Jesús
+*
+ */
+
 
 #ifndef MUSICPLAYER_H_
 #define MUSICPLAYER_H_

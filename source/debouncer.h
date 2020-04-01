@@ -4,6 +4,13 @@
  *  Created on: 20 mar. 2020
  *      Author: ruizt
  */
+/*
+*Ruiz Tyler Anthony
+*Celis Regalado Paulo Enrique
+*González Téllez José de Jesús
+*
+ */
+
 
 #ifndef DEBOUNCER_H_
 #define DEBOUNCER_H_
