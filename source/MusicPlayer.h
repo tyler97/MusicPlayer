@@ -122,6 +122,16 @@ void MusicPlayer(playerInfo* player, output* pins)
 			PIT_StartTimer(PIT, kPIT_Chnl_1);
 
 		}
+		if(player->button[NEXT].button.action == next)
+		{
+			player->track = Track(next, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
+		}
+		else if(player->button[PREV].button.action == prev)
+		{
+			player->track = Track(prev, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
+		}
 
 		break;
 
@@ -283,6 +293,16 @@ void MusicPlayer(playerInfo* player, output* pins)
 			PIT_StartTimer(PIT, kPIT_Chnl_1);
 
 		}
+		if(player->button[NEXT].button.action == next)
+		{
+			player->track = Track(next, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
+		}
+		else if(player->button[PREV].button.action == prev)
+		{
+			player->track = Track(prev, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
+		}
 
 		break;
 	case backwards:
@@ -310,6 +330,16 @@ void MusicPlayer(playerInfo* player, output* pins)
 			PIT_StartTimer(PIT, kPIT_Chnl_1);
 
 		}
+		else if(player->button[NEXT].button.action == next)
+		{
+			player->track = Track(next, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
+		}
+		else if(player->button[PREV].button.action == prev)
+		{
+			player->track = Track(prev, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
+		}
 
 		break;
 
@@ -327,6 +357,16 @@ void MusicPlayer(playerInfo* player, output* pins)
 		{
 			player->curState = onReleasePause;
 
+		}
+		else if(player->button[NEXT].button.action == next)
+		{
+			player->track = Track(next, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
+		}
+		else if(player->button[PREV].button.action == prev)
+		{
+			player->track = Track(prev, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
 		}
 
 		break;
@@ -347,6 +387,17 @@ void MusicPlayer(playerInfo* player, output* pins)
 			WritePins(&pins[TRACKPIN], player->track);
 			WritePins(&pins[SONGPIN], player->songPos);
 
+		}
+
+		else if(player->button[NEXT].button.action == next)
+		{
+			player->track = Track(next, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
+		}
+		else if(player->button[PREV].button.action == prev)
+		{
+			player->track = Track(prev, player->track);
+			WritePins(&pins[TRACKPIN], player->track);
 		}
 
 		break;
